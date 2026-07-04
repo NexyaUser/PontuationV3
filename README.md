@@ -1,3 +1,4 @@
+<img width="593" height="484" alt="Recording 2026-07-03 at 23 52 59" src="https://github.com/user-attachments/assets/6e4cb857-47b9-419f-b814-03b0575cecfe" />
 # Pontuation V3
 I've been wanting to leave the "terminal typing" type thing, and gave some research on how to work with interfaces.
 Although the interface itself is rusty, it's overall better than the last one + It got musics, my own musics!
