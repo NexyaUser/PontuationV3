@@ -5,7 +5,7 @@ Although the interface itself is rusty, it's overall better than the last one + 
 # System
 The game itself behind the UI still the same: random variable, loops and inputs from the player to the code, still
 the same conditional work as before. The main differential here is the UI! I used the Tkinter destroy() function
-to make it look like you're going back and fourth in diffrent screens, but they're rebuilt each time you come and
+to make it look like you're going back and forth in different screens, but they're rebuilt each time you come and
 go. And since I had the interface, why not music? So I made some simple 8 bit style musics.
 
 # What's in the code?
