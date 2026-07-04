@@ -1,46 +1,48 @@
 import tkinter as tk
 import random as rng
 import pygame as pg
+import os
+import sys
 
 root = tk.Tk()
 root.geometry("400x300")
+
 pg.init()
 pg.mixer.init()
+
 volume = 50
-winSFX = pg.mixer.Sound("WinEffect.mp3")
-
-# Começa com o Light Mode (1) selecionado por padrão
+scriptPath = os.path.dirname(os.path.abspath(__file__))
 V1 = tk.IntVar(value=1)
-
-# Definições de Cores
+# ----------------------------------------------------------
 WhiteBG = "#ffffff"
 WhiteFG = "#1e1e1e"
 WhiteBTN_BG = "#f0f0f0"
-
 BlackBG = "#1e1e1e"
 BlackFG = "#ffffff"
 BlackBTN_BG = "#2e2e2e"
+scriptPath = os.path.dirname(os.path.abspath(__file__))
+# ----------------------------------------------------------
+def musicPath(nome_arquivo):
+    return os.path.join(scriptPath, nome_arquivo)
 
-# FUNÇÃO NOVA: Garante que tudo que for criado na tela adote o tema atual
+winSFX = pg.mixer.Sound(musicPath("WinEffect.mp3"))
+
 def applyTheme(widget=None):
     if widget is None:
         widget = root
         
     bg, fg, btn_bg = getTheme()
     
-    # Aplica a cor de fundo na janela principal ou frames
     if widget == root:
         root.configure(bg=bg)
         
-    # Verifica o tipo de componente para aplicar a cor certa
-    if isinstance(widget, (tk.Label, tk.Message, tk.Radiobutton, tk.Scale)):
+    if isinstance(widget, (tk.Label, tk.Message, tk.Radiobutton, tk.Scale)): # <-------- REVIEW LATER
         widget.configure(bg=bg, fg=fg)
     elif isinstance(widget, tk.Button):
         widget.configure(bg=btn_bg, fg=fg, activebackground=btn_bg, activeforeground=fg)
     elif isinstance(widget, tk.Entry):
-        widget.configure(bg=btn_bg, fg=fg, insertbackground=fg) # insertbackground muda a cor do cursor piscando
+        widget.configure(bg=btn_bg, fg=fg, insertbackground=fg)
 
-    # Passa recursivamente por todos os componentes filhos
     for child in widget.winfo_children():
         applyTheme(child)
 
@@ -58,13 +60,15 @@ def TelaInfo():
     info = "This is a simple game made by Wellington, powered by Python 3.13."
     tk.Label(root, text=info, wraplength=300).pack(pady=20)
     tk.Button(root, text="Return", command=menu).pack()
-    applyTheme() # Atualiza o tema dos novos elementos
+    applyTheme() 
 
 def GameScreen():
     clean()
     tk.Label(root, text="[Gamemodes]").pack()
     tk.Button(root, text="Normal", command=Normal).pack()
-    applyTheme() # Atualiza o tema dos novos elementos
+    applyTheme()
+
+# Fucking hell, this is a mess. I need to clean this up later.
 
 def Settings():
     clean()
@@ -79,13 +83,11 @@ def Settings():
         volume = scale.get()
         menu()
 
-    # Mudamos o comando para aplicar o tema assim que clicar no Radiobutton
     tk.Radiobutton(root, text="Light Mode", variable=V1, value=1, command=applyTheme).pack()
     tk.Radiobutton(root, text="Dark Mode", variable=V1, value=2, command=applyTheme).pack()
     tk.Button(root, text="Save", command=saveVolume).pack()
     tk.Button(root, text="Return", command=menu).pack()
-    applyTheme() # Atualiza o tema dos novos elementos
-
+    applyTheme()
 def Normal():
     clean()
     pg.mixer.music.stop()
@@ -96,11 +98,13 @@ def Normal():
     answer = tk.Entry(root)
     answer.pack()
 
+# >:(
+
     resultado_label = tk.Label(root, text="")
     resultado_label.pack()
     print(valor)  
     returnButton = tk.Button(root, text="Return", command=menu)
-    pg.mixer.music.load("MainGameTheme.mp3")
+    pg.mixer.music.load(musicPath("MainGameTheme.mp3"))
     pg.mixer.music.play(-1)  
 
     def verify():
@@ -124,7 +128,9 @@ def Normal():
 
     verifyButton = tk.Button(root, text="Verify", command=verify)
     verifyButton.pack()
-    applyTheme() # Atualiza o tema dos novos elementos
+    applyTheme()
+
+# I hate Tkinter with all my heart
 
 def menu():
     clean()
@@ -137,10 +143,10 @@ def menu():
     tk.Button(root, text="Settings", command=Settings).pack()
     tk.Button(root, text="Quit", command=root.quit).pack()
     
-    pg.mixer.music.load("MenuTheme.mp3")
+    pg.mixer.music.load(musicPath("MenuTheme.mp3"))
     pg.mixer.music.set_volume(volume / 100)
     pg.mixer.music.play(-1)
-    applyTheme() # Aplica o tema em tudo do menu
+    applyTheme()
 
 menu()
 root.mainloop()
